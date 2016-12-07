@@ -28,14 +28,15 @@ if {[string equal [get_filesets -quiet sources_1] ""]} {
 }
 
 # Set 'sources_1' fileset object
-set obj [get_filesets sources_1]
+set source_fileset [get_filesets sources_1]
 set files [list \
  "[file normalize "$origin_dir/fpga_sources/rtl/hw_interface.vhd"]"\
+ "[file normalize "$origin_dir/fpga_sources/rtl/clocking.vhd"]"\
 ]
-add_files -norecurse -fileset $obj $files
+read_vhdl $files
 
 # Set the toplevel entity
-set_property "top" "hw_interface" $obj
+set_property "top" "hw_interface" $source_fileset
 
 # Create 'constrs_1' fileset (if not found)
 if {[string equal [get_filesets -quiet constrs_1] ""]} {
