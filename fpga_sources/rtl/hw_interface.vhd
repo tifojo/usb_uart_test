@@ -12,6 +12,10 @@ end;
 
 architecture structural of hw_interface is
     signal clk_96mhz: std_logic;
+    signal uart_txd_in_synchronized: std_logic;
+
+    attribute mark_debug: string;
+    attribute mark_debug of uart_txd_in_synchronized: signal is "true";
 begin
     clocking: entity work.clocking
         port map(
@@ -24,6 +28,8 @@ begin
         port map(
             clk => clk_96mhz,
             i => uart_txd_in,
-            o => ja(0)
+            o => uart_txd_in_synchronized
         );
+
+    ja(0) <= uart_txd_in_synchronized;
 end;

@@ -45,11 +45,16 @@ if {[string equal [get_filesets -quiet constrs_1] ""]} {
 }
 
 # Set 'constrs_1' fileset object
-set obj [get_filesets constrs_1]
+set constrs_fileset [get_filesets constrs_1]
+set files [list \
+ "[file normalize "$origin_dir/fpga_sources/constraints/CmodA7_Master.xdc"]"\
+ "[file normalize "$origin_dir/fpga_sources/constraints/debug.xdc"]"\
+]
+read_xdc $files
 
-# Add/Import constrs file and set constrs file properties
-set file "[file normalize "$origin_dir/fpga_sources/constraints/CmodA7_Master.xdc"]"
-set file_added [add_files -norecurse -fileset $obj $file]
+# # Add/Import constrs file and set constrs file properties
+# set file "[file normalize "$origin_dir/fpga_sources/constraints/CmodA7_Master.xdc"]"
+# set file_added [add_files -norecurse -fileset $obj $file]
 
 # Create 'sim_1' fileset (if not found)
 if {[string equal [get_filesets -quiet sim_1] ""]} {

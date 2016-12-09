@@ -6,9 +6,6 @@ library unisim;
 use unisim.vcomponents.all;
 
 entity sync is
-    generic(
-        init: std_logic := '0'
-    );
     port(
         clk: in std_logic;
         i: in std_logic; -- asynchronous input
@@ -21,7 +18,7 @@ architecture structural of sync is
     signal metastable: std_logic;
     signal sync_output: std_logic;
 
-    -- Force vivado to place both registers in the same logic slice
+    -- Force Vivado to place both registers in the same logic slice
     -- (for minimum routing delay)
     attribute async_reg: string;
     attribute async_reg of ff1: label is "true";
