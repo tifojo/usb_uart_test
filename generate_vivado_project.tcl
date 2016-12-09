@@ -32,6 +32,7 @@ set source_fileset [get_filesets sources_1]
 set files [list \
  "[file normalize "$origin_dir/fpga_sources/rtl/hw_interface.vhd"]"\
  "[file normalize "$origin_dir/fpga_sources/rtl/clocking.vhd"]"\
+ "[file normalize "$origin_dir/fpga_sources/rtl/sync.vhd"]"\
 ]
 read_vhdl $files
 
