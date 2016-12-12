@@ -6,6 +6,9 @@ library unisim;
 use unisim.vcomponents.all;
 
 entity sync is
+    generic(
+        init: bit := '0'
+    );
     port(
         clk: in std_logic;
         i: in std_logic; -- asynchronous input
@@ -29,6 +32,7 @@ begin
     -- Instantiate a chain of two D flip flops
     -- The first FF samples the asynchronous signal
     ff1: FD
+        generic map( INIT => init )
         port map(
             C => clk,
             D => async_input,
@@ -37,6 +41,7 @@ begin
 
     -- Second FF allows time for metastability resolution
     ff2: FD
+        generic map( INIT => init )
         port map(
             C => clk,
             D => metastable,

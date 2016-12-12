@@ -12,10 +12,12 @@ end;
 
 architecture structural of hw_interface is
     signal clk_96mhz: std_logic;
-    signal uart_txd_in_synchronized: std_logic;
+    signal uart_data: std_logic_vector(7 downto 0);
+    signal uart_data_strobe: std_logic;
 
     attribute mark_debug: string;
-    attribute mark_debug of uart_txd_in_synchronized: signal is "true";
+    attribute mark_debug of uart_data: signal is "true";
+    attribute mark_debug of uart_data_strobe: signal is "true";
 begin
     clocking: entity work.clocking
         port map(
@@ -24,12 +26,13 @@ begin
             locked => led(0)
         );
 
-    uart_sync: entity work.sync
+    uart_rx: entity work.uart_rx
         port map(
             clk => clk_96mhz,
-            i => uart_txd_in,
-            o => uart_txd_in_synchronized
+            rx => uart_txd_in,
+            data => uart_data,
+            data_strobe => uart_data_strobe
         );
 
-    ja(0) <= uart_txd_in_synchronized;
+    ja(0) <= uart_data_strobe;
 end;

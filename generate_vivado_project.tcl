@@ -32,9 +32,13 @@ set source_fileset [get_filesets sources_1]
 set files [list \
  "[file normalize "$origin_dir/fpga_sources/rtl/hw_interface.vhd"]"\
  "[file normalize "$origin_dir/fpga_sources/rtl/clocking.vhd"]"\
+ "[file normalize "$origin_dir/fpga_sources/rtl/uart_rx.vhd"]"\
  "[file normalize "$origin_dir/fpga_sources/rtl/sync.vhd"]"\
 ]
-read_vhdl $files
+foreach file $files {
+    read_vhdl $file
+    set_property file_type "VHDL 2008" [get_files $file]
+}
 
 # Set the toplevel entity
 set_property "top" "hw_interface" $source_fileset
@@ -52,25 +56,26 @@ set files [list \
 ]
 read_xdc $files
 
-# # Add/Import constrs file and set constrs file properties
-# set file "[file normalize "$origin_dir/fpga_sources/constraints/CmodA7_Master.xdc"]"
-# set file_added [add_files -norecurse -fileset $obj $file]
-
 # Create 'sim_1' fileset (if not found)
 if {[string equal [get_filesets -quiet sim_1] ""]} {
   create_fileset -simset sim_1
 }
 
-# Set 'sim_1' fileset object
-set obj [get_filesets sim_1]
-# Empty (no sources present)
-
 # Set 'sim_1' fileset properties
-set obj [get_filesets sim_1]
-set_property "transport_int_delay" "0" $obj
-set_property "transport_path_delay" "0" $obj
-set_property "xelab.nosort" "1" $obj
-set_property "xelab.unifast" "" $obj
+set sim_fileset [get_filesets sim_1]
+set_property "transport_int_delay" "0" $sim_fileset
+set_property "transport_path_delay" "0" $sim_fileset
+set_property "xelab.nosort" "1" $sim_fileset
+set_property "xelab.unifast" "" $sim_fileset
+
+set sim_files [list \
+ "[file normalize "$origin_dir/fpga_sources/rtl/testbench/uart_rx_tb.vhd"]"\
+]
+add_files -fileset sim_1 -norecurse $sim_files
+set_property top uart_rx_tb $sim_fileset
+set_property top_lib xil_defaultlib $sim_fileset
+
+set_property -name {xsim.simulate.runtime} -value {10us} -objects [get_filesets sim_1]
 
 # Create 'synth_1' run (if not found)
 if {[string equal [get_runs -quiet synth_1] ""]} {
