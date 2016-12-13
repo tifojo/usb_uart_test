@@ -6,6 +6,7 @@ entity hw_interface is
         sysclk: in std_logic; -- 12 MHz system clock
         led: out std_logic_vector(0 downto 0);
         uart_txd_in: in std_logic;
+        uart_rxd_out: out std_logic;
         ja: out std_logic_vector(0 downto 0)
     );
 end;
@@ -34,5 +35,12 @@ begin
             data_strobe => uart_data_strobe
         );
 
-    ja(0) <= uart_data_strobe;
+    uart_tx: entity work.uart_tx
+        port map(
+            clk => clk_96mhz,
+            tx => uart_rxd_out,
+            data => uart_data, -- XXX temporary
+            tx_request => '1',
+            tx_done => ja(0)
+        );
 end;

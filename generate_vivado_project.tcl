@@ -33,6 +33,7 @@ set files [list \
  "[file normalize "$origin_dir/fpga_sources/rtl/hw_interface.vhd"]"\
  "[file normalize "$origin_dir/fpga_sources/rtl/clocking.vhd"]"\
  "[file normalize "$origin_dir/fpga_sources/rtl/uart_rx.vhd"]"\
+ "[file normalize "$origin_dir/fpga_sources/rtl/uart_tx.vhd"]"\
  "[file normalize "$origin_dir/fpga_sources/rtl/sync.vhd"]"\
 ]
 foreach file $files {
