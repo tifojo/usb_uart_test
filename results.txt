@@ -1,0 +1,16 @@
+In [22]: if 1:
+    ...:     bytes = 0
+    ...:     start = time.time()
+    ...:     for i in range(1000):
+    ...:         dev.write("0")
+    ...:         bytes += len(dev.read(4096))
+    ...:         end = time.time()
+    ...:         
+    ...:         
+
+In [23]: bytes
+Out[23]: 4096000
+
+In [24]: end-start
+Out[24]: 4.029440879821777
+

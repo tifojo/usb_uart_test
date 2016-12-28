@@ -14,7 +14,7 @@ end;
 
 architecture rtl of uart_tx is
     type register_type is record
-        tx_buffer: std_logic_vector(9 downto 0);
+        tx_buffer: std_logic_vector(8 downto 0); -- data word plus start bit
         tx_active: std_logic;
         oversample_counter: unsigned(2 downto 0);
         bit_counter: unsigned(3 downto 0);
@@ -48,21 +48,22 @@ begin
         if regs.tx_active = '0' then
             -- idle
             if tx_request = '1' then
-                -- latch input with start and stop bits added
-                next_v.tx_buffer := '1' & data & '0';
+                -- latch input with start bit appended
+                next_v.tx_buffer := data & '0';
                 next_v.tx_active := '1';
                 next_v.bit_counter := (others => '0');
             end if;
         else
             next_v.oversample_counter := regs.oversample_counter + 1;
             if regs.oversample_counter = CLK_PER_BIT - 1 then
-                if regs.bit_counter = regs.tx_buffer'length - 1 then
+                if regs.bit_counter = 9 -- start + data + stop transmitted
+                then
                     -- done transmitting
                     next_v.tx_active := '0';
                     tx_done <= '1';
                 else
                     -- shift out the next bit
-                    next_v.tx_buffer := '1' & regs.tx_buffer(9 downto 1);
+                    next_v.tx_buffer := '1' & regs.tx_buffer(8 downto 1);
                     next_v.bit_counter := regs.bit_counter + 1;
                 end if;
             end if;

@@ -35,6 +35,7 @@ set files [list \
  "[file normalize "$origin_dir/fpga_sources/rtl/uart_rx.vhd"]"\
  "[file normalize "$origin_dir/fpga_sources/rtl/uart_tx.vhd"]"\
  "[file normalize "$origin_dir/fpga_sources/rtl/sync.vhd"]"\
+ "[file normalize "$origin_dir/fpga_sources/rtl/trigger_reply.vhd"]"\
 ]
 foreach file $files {
     read_vhdl $file

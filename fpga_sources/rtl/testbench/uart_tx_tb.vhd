@@ -14,16 +14,28 @@ architecture rtl of uart_tx_tb is
     signal data: std_logic_vector(7 downto 0);
     signal tx_request: std_logic := '0';
     signal tx_done: std_logic;
+    signal loopback: std_logic;
+    signal loopback_data: std_logic_vector(7 downto 0);
 begin
     clk <= not clk after CLK_PERIOD/2;
 
+    -- unit under test
     uart_tx: entity work.uart_tx
         port map(
             clk => clk,
-            tx => open,
+            tx => loopback,
             data => data,
             tx_request => tx_request,
             tx_done => tx_done
+        );
+
+    -- use uart_rx to decode outputs of uart_tx
+    uart_rx: entity work.uart_rx
+        port map(
+            clk => clk,
+            rx => loopback,
+            data => loopback_data,
+            data_strobe => open
         );
 
     stimulus: process begin
